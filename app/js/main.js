@@ -29,6 +29,27 @@
     });
   }
 
+  var sprites = {};
+  var typeColors = {
+    fire: '#ef3932',
+    water: '#1e26c9',
+    air: '#caccf1',
+    earth: '#965f32',
+  };
+
+  types.forEach(function(type) {
+    var spriteCanvas = document.createElement('canvas');
+    spriteCanvas.width = 14;
+    spriteCanvas.height = 14;
+    var spriteCtx = spriteCanvas.getContext('2d');
+    spriteCtx.fillStyle = typeColors[type];
+    spriteCtx.beginPath();
+    spriteCtx.arc(7, 7, 7, 0, TAU);
+    spriteCtx.closePath();
+    spriteCtx.fill();
+    sprites[type + '7'] = spriteCanvas;
+  });
+
   function gameLoop() {
     tick();
     draw();
@@ -75,13 +96,6 @@
     }
   }
 
-  var typeColors = {
-    fire: '#ef3932',
-    water: '#1e26c9',
-    air: '#caccf1',
-    earth: '#965f32',
-  };
-
   function draw() {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -89,14 +103,8 @@
     var atom;
     for (var i = 0; i < atoms.length; i++) {
       atom = atoms[i];
-      ctx.save();
-      ctx.fillStyle = typeColors[atom.type],
-      ctx.translate(atom.x, atom.y);
-      ctx.beginPath();
-      ctx.arc(0, 0, atom.r, 0, TAU);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
+      var sprite = sprites[atom.type + atom.r];
+      ctx.drawImage(sprite, atom.x - atom.r, atom.y - atom.r);
     }
   }
 
