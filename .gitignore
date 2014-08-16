@@ -1,3 +1,5 @@
 /node_modules/
-/dist/
+/min/
+/dev/
 /ewaf.zip
+/ewaf-dev.zip

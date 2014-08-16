@@ -38,14 +38,17 @@ gulp.task('build.css', function() {
 });
 
 gulp.task('build.js', function() {
-  return gulp.src('app/**/*.js')
-    .pipe(uglify({
-      compress: {
-        unsafe: true,
-     },
-    }))
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('min'))
+  var uglifyOpts = {compress: {unsafe: true}};
+  return es.merge(
+    gulp.src('app/js/main.js')
+      .pipe(uglify(uglifyOpts))
+      .pipe(concat('app.js')),
+
+    gulp.src('app/js/game_worker.js')
+      .pipe(uglify(uglifyOpts))
+      .pipe(concat('game_worker.js'))
+  )
+  .pipe(gulp.dest('min'));
 });
 
 gulp.task('build-dev', ['build-dev.js', 'build-dev.css', 'build-dev.html']);
@@ -62,14 +65,24 @@ gulp.task('build-dev.css', function() {
 });
 
 gulp.task('build-dev.js', function() {
-  return gulp.src('app/**/*.js')
-    .pipe(concat('app.js'))
-    .pipe(gulp.dest('dev'))
+  return es.merge(
+    gulp.src('app/js/main.js')
+      .pipe(concat('app.js')),
+    gulp.src('app/js/game_worker.js')
+      .pipe(concat('game_worker.js'))
+  )
+  .pipe(gulp.dest('dev'));
 });
 
 gulp.task('package', ['build'], function() {
-  gulp.src('min/**/*')
+  return gulp.src('min/**/*', {base: '.'})
     .pipe(zip('ewaf.zip'))
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('package-dev', ['build-dev'], function() {
+  return gulp.src('dev/**/*', {base: '.'})
+    .pipe(zip('ewaf-dev.zip'))
     .pipe(gulp.dest('.'));
 });
 
