@@ -12,7 +12,6 @@ var htmlSrc = require('gulp-html-src');
 var minifyHtml = require('gulp-minify-html');
 var rename = require('gulp-rename');
 var rm = require('gulp-rm');
-var rsvg = require('gulp-rsvg');
 var uglify = require('gulp-uglify');
 var webserver = require('gulp-webserver');
 var zip = require('gulp-zip');
